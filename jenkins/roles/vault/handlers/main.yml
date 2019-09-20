@@ -1,0 +1,9 @@
+---
+# handlers file for vault
+
+- name: restart vault
+  systemd:
+    name: vault
+    state: restarted
+    enabled: true
+    daemon_reload: true

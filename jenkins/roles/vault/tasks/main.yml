@@ -1,0 +1,34 @@
+---
+# tasks file for vault
+
+- name: apt-get stuff
+  package:
+    name: unzip
+    state: present
+
+- name: wget vault binary
+  get_url:
+    url: https://releases.hashicorp.com/vault/1.2.2/vault_1.2.2_linux_amd64.zip
+    dest: /usr/local/etc
+
+- name: unarchive vault
+  unarchive:
+    src: /usr/local/etc/vault_1.2.2_linux_amd64.zip
+    dest: /usr/local/bin/
+    remote_src: true
+  notify:
+    - restart vault
+
+- name: deploy service file
+  template:
+    src: service
+    dest: /etc/systemd/system/vault.service
+  notify:
+    - restart vault
+
+- name: deploy vault config file
+  template:
+    src: config
+    dest: /vault.cfg
+  notify:
+    - restart vault
